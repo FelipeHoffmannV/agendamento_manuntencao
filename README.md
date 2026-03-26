@@ -135,11 +135,6 @@ agendamento_manuntencao/
 
 ## Desenvolvimento
 
-### Executando Testes
-```bash
-python manage.py test
-```
-
 ### Fazendo Migrações
 ```bash
 python manage.py makemigrations
