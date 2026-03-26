@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    
+    <h3>Dados do Cliente</h3>
+    {% crispy form %}  <!-- Este é o ClientForm -->
+
+    <hr>
+    <h3>Endereço</h3>
+    {% crispy endereco_form %} <!-- Este é o EnderecoForm -->
+
+    <button type="submit" class="btn btn-primary">Salvar Cadastro</button>
+</form>
+{% endblock %}
