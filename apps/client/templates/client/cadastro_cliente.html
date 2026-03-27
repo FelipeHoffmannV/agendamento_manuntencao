@@ -6,11 +6,11 @@
     {% csrf_token %}
     
     <h3>Dados do Cliente</h3>
-    {% crispy form %}  <!-- Este é o ClientForm -->
+    {% crispy form %}  
 
     <hr>
     <h3>Endereço</h3>
-    {% crispy endereco_form %} <!-- Este é o EnderecoForm -->
+    {% crispy endereco_form %} 
 
     <button type="submit" class="btn btn-primary">Salvar Cadastro</button>
 </form>

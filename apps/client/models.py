@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.hashers import check_password, make_password
 # Create your models here.
 
 class User(AbstractUser):
@@ -13,7 +14,7 @@ class EnderecoClient(models.Model):
     id_endereco_client = models.AutoField(primary_key=True, null=False, unique=True)
     cep = models.CharField("CEP", max_length=9, blank=False)
     rua = models.CharField("Rua/Logradouro", max_length=200, blank=False)
-    numero = models.CharField("Numero", max_length=10, blank=False, unique=True)
+    numero = models.CharField("Numero", max_length=10, blank=False)
     bairro = models.CharField("Bairro", max_length=200, blank=False, null=True)
     cidade = models.CharField(max_length=2, choices=Cidade.choices, default=Cidade.RIO_NEGRO)
 
@@ -24,6 +25,15 @@ class Client(models.Model):
     email_client = models.EmailField(max_length=200, blank=False, unique=True)
     tel_client = models.CharField(max_length=14, blank=False, unique=True)
     endereco = models.OneToOneField(EnderecoClient, on_delete=models.SET_NULL, null=True, unique=True)
+
+    password = models.CharField("Senha", max_length=128, null=True)
+
+    #Função de hash
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+    
+    def check_password(self, raw_password):
+        return self.check_password(raw_password, self.password)
 
 
     def __str__(self):
