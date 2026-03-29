@@ -2,10 +2,8 @@ from django import forms
 from .models import Client, EnderecoClient
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import AuthenticationForm
 
-
-# form cadastro
 class EnderecoForm(forms.ModelForm):
     class Meta:
         model = EnderecoClient
@@ -30,8 +28,7 @@ class EnderecoForm(forms.ModelForm):
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = ['name_client', 'tel_client', 'email_client', 'password']
-        exclude = ['id_client', 'endereco']
+        fields = ['username', 'tel_client', 'email_client', 'password']
         widgets = {
             'password': forms.PasswordInput(attrs={'placeholder': 'Sua senha'}),
         }
@@ -42,19 +39,33 @@ class ClientForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Row(
-                Column('name_client', css_class='col-md-4'),
-                Column('tel_client', css_class='col-md-4'),
+                Column('username', css_class='col-md-6'), 
                 Column('email_client', css_class='col-md-4'),
+            ),
+            Row(
+                Column('tel_client', css_class='col-md-4'),
                 Column('password', css_class='col-md-4'),
             )
         )
     
     def save(self, commit=True):
         client = super().save(commit=False)
-        client.password = make_password(self.cleaned_data['password'])
+        client.set_password(self.cleaned_data['password'])
         if commit:
             client.save()
         return client
 
 
-#form login
+class LoginForm(AuthenticationForm): # Usar AuthenticationForm facilita muito
+    username = forms.CharField(label="Usuário", widget=forms.TextInput(attrs={'placeholder': 'Seu usuário'}))
+    password = forms.CharField(label="Senha", widget=forms.PasswordInput(attrs={'placeholder': 'Sua senha'}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            'username',
+            'password',
+            Submit('submit', 'Entrar', css_class='btn btn-primary w-20'),
+        )

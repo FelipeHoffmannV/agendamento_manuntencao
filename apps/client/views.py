@@ -1,10 +1,10 @@
 from django.urls import reverse_lazy
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.views.generic import CreateView
+from django.contrib.auth.views import LoginView
 from .models import Client
-from .forms import ClientForm, EnderecoForm 
-
-# views.py
+from .forms import ClientForm, EnderecoForm, LoginForm
 
 class ClientCreateView(CreateView):
     model = Client
@@ -25,18 +25,21 @@ class ClientCreateView(CreateView):
         endereco_form = context['endereco_form']
         
         if form.is_valid() and endereco_form.is_valid():
-            
+            # Salva o endereço primeiro
             endereco = endereco_form.save()
-            
-           
             cliente = form.save(commit=False)
             cliente.endereco = endereco
             cliente.save()
             
-           
-            from django.shortcuts import redirect
             return redirect(self.success_url)
         else:
-            print("Erros no Cliente:", form.errors)
-            print("Erros no Endereço:", endereco_form.errors)
             return self.render_to_response(self.get_context_data(form=form))
+
+class ClientLoginView(LoginView):
+    template_name = 'client/login_client.html' 
+    authentication_form = LoginForm
+    next_page = reverse_lazy('core:home') 
+    extra_context = {'login_form': LoginForm()}
+    
+        
+        

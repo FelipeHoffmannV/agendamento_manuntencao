@@ -1,4 +1,19 @@
 {% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-    
-{% endblock %}
+    <div class="container">
+    <form method="post">
+        {% csrf_token %}
+          {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Usuário ou senha incorretos. Por favor, tente novamente.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+        <h1>Bem vindo!</h1>
+        <h3>Insira seus dados para entrar:</h3>
+        {% crispy login_form %}
+        <a class="btn btn-success w-20 mt-2" href="{% url 'client:cadastro_cliente' %}">Cadastrar-se</a>
+    </form>
+    </div>
+    {% endblock %}

@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<form method="post">
+<form class="container" method="post">
     {% csrf_token %}
     
     <h3>Dados do Cliente</h3>
@@ -13,5 +13,6 @@
     {% crispy endereco_form %} 
 
     <button type="submit" class="btn btn-primary">Salvar Cadastro</button>
+    <a class="btn btn-success w-20" href="{% url 'client:login' %}">Já possui cadastro? Clique aqui para entrar.</a>
 </form>
 {% endblock %}

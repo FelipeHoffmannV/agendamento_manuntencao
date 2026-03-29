@@ -19,25 +19,16 @@ class EnderecoClient(models.Model):
     cidade = models.CharField(max_length=2, choices=Cidade.choices, default=Cidade.RIO_NEGRO)
 
 
-class Client(models.Model):
-    id_client = models.AutoField(primary_key=True, null=False)
-    name_client = models.CharField(max_length=100, blank=False)
-    email_client = models.EmailField(max_length=200, blank=False, unique=True)
-    tel_client = models.CharField(max_length=14, blank=False, unique=True)
-    endereco = models.OneToOneField(EnderecoClient, on_delete=models.SET_NULL, null=True, unique=True)
-
-    password = models.CharField("Senha", max_length=128, null=True)
-
-    #Função de hash
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
+class Client(User):
     
-    def check_password(self, raw_password):
-        return self.check_password(raw_password, self.password)
+    email_client = models.EmailField(unique=True)
+    tel_client = models.CharField(max_length=14, unique=True)
+    endereco = models.OneToOneField(EnderecoClient, on_delete=models.SET_NULL, null=True)
+
 
 
     def __str__(self):
-        return self.name_client
+        return self.get_full_name() or self.username
 
 
 
