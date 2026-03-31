@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <form class="container" method="post">
+    {% csrf_token %}
+    <h3>Servico</h3>
+    {{ form|crispy }} <!-- Use o filtro em vez da tag para testar -->
+
+    <hr>
+    <h3>Dispositivo</h3>
+    {{ dispositivo_form|crispy }}
+    
+    <button type="submit" class="btn btn-outline-primary">Enviar</button>
+</form> 
+
+{% endblock %}
